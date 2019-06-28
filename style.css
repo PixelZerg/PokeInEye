@@ -22,6 +22,10 @@ span {
   display: inline-block;
 }
 
+.word li span{
+  display: inline;
+}
+
 .box{
     margin: auto;
     width: 70%;
