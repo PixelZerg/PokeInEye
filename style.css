@@ -71,3 +71,12 @@ span {
 .gen:hover{
   opacity: 1
 }
+
+@media only screen and (max-width: 840px) {
+  body{
+    font-size: 40px;
+  }
+  .box {
+      width: 95%;
+  }
+}
