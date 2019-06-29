@@ -55,6 +55,7 @@ span {
 }
 
 .gen{
+  background: transparent;
   border-radius: 5px;
   border: 2px solid;
   padding: 16px 32px;
