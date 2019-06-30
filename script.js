@@ -1,7 +1,8 @@
 (function () {
-    var w_verb = ["bash", "clap", "hit", "jab", "nudge", "pat", "poke", "prick", "prod", "shove", "slap", "stab", "stroke", "tickle", "twist"];
+    var w_verb = ["bash", "clap", "hit", "jab", "nudge", "pat", "poke", "prick", "prod", "shove", "slap", "stab", "stroke", "tickle", "twist", "smack"];
+    var w_prep = [3,      3,      3,      3,     1,      0,     1,      1,       1,      1,        3,     1,       2,        2,       1,       3];
     var w_bodypart = ["face", "eye", "nose", "mouth", "ear", "cheek", "chin", "nostril", "eyebrow", "eyelid", "eyelash", "lips", "arm", "finger", "palm", "wrist", "forearm", "elbow", "shoulder", "thumb", "knuckle", "leg", "foot", "knee", "shin", "ankle", "heel", "toe", "heart", "brain", "throat", "liver", "stomach", "ribs", "hair", "tongue", "teeth", "waist", "bicep", "neck"];
-    var w_marine = ["carp", "eel", "catfish", "blobfish", "shark", "cowfish", "stingray", "haddock", "jellyfish", "goldfish", "mackerel", "ray", "mullet", "needlefish", "anchovy", "cod", "piranha", "pufferfish", "herring", "sardine", "trout", "whale", "dolphin", "octopus", "lobster", "pike", "salmon", "shrimp", "seahorse", "penguin", "squid", "turtle", "crab", "seal", "walrus", "otter"];
+    var w_marine = ["carp", "eel", "catfish", "blobfish", "shark", "cowfish", "stingray", "haddock", "jellyfish", "goldfish", "mackerel", "mullet", "needlefish", "anchovy", "cod", "piranha", "pufferfish", "herring", "sardine", "trout", "whale", "dolphin", "octopus", "lobster", "pike", "salmon", "shrimp", "seahorse", "penguin", "squid", "turtle", "crab", "seal", "walrus", "otter"];
 
     var anim_done = true;
 
@@ -9,13 +10,31 @@
         return list[Math.floor((Math.random()*list.length))];
     }
 
-    function get_sentence(){
-        return get_random(w_verb) + " in the " + get_random(w_bodypart) + " with a wet " + get_random(w_marine);
+    function get_prep(){
+        prep_class = w_prep[w_verb.indexOf(untitle($('.word#verb').text().trim()))];
+        l_preps = ["in"];
+
+        if (prep_class == 0){
+            l_preps = ["on"];
+        } else if (prep_class == 1){
+            l_preps = ["in"];
+        } else if (prep_class == 2){
+            l_preps = ["on", "across"];
+        } else if (prep_class == 3){
+            l_preps = ["in", "on"];
+        }
+
+        return get_random(l_preps);
     }
 
     function title(s) 
     {
         return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function untitle(s) 
+    {
+        return s.charAt(0).toLowerCase() + s.slice(1);
     }
 
     function anim(id, word, on_done=null){
@@ -71,8 +90,9 @@
         // sentence setup
         var sentence_div = $('.sentence');
         
-        sentence_div.append('<span class="word" id="verb"> <ul></ul> </span> <span> in the </span> <span class="word" id="bodypart"> <ul></ul> </span> <span> with a wet </span> <span class="word" id="marine"> <ul></ul> </span>');
+        sentence_div.append('<span class="word" id="verb"> <ul></ul> </span> <span class="word" id="prep"> <ul></ul> </span> <span> the </span> <span class="word" id="bodypart"> <ul></ul> </span> <span> with a wet </span> <span class="word" id="marine"> <ul></ul> </span>');
         anim('verb', 'Poke');
+        anim('prep', 'in');
         anim('bodypart', 'eye');
         anim('marine', 'cod');
 
@@ -80,8 +100,10 @@
             if(!anim_done) return;
             
             anim('verb', title(get_random(w_verb)), function(){
-                anim('bodypart', get_random(w_bodypart), function(){
-                    anim('marine', get_random(w_marine));
+                anim('prep', get_prep(), function(){
+                    anim('bodypart', get_random(w_bodypart), function(){
+                        anim('marine', get_random(w_marine));
+                    });
                 });
             });
         })
